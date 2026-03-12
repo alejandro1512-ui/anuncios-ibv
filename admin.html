@@ -12,7 +12,7 @@
         const inputNombre = document.getElementById("textoAnuncio")
 
         btnEnviar.addEventListener("click", async function() {
-            const respuesta = await fetch("http://127.0.0.1:8000/anuncios", {
+            const respuesta = await fetch("https://anuncios-ibv-production.up.railway.app", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
