@@ -10,7 +10,7 @@
         const display = document.getElementById("anuncios")
 
         async function cargarAnuncios() {
-            const respuesta = await fetch("https://anuncios-ibv-production.up.railway.app")
+            const respuesta = await fetch("https://anuncios-ibv-production.up.railway.app/anuncios")
             const datos = await respuesta.json()
             
             datos.forEach(function(anuncio){
