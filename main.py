@@ -24,6 +24,9 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 class Anuncio(BaseModel):
     texto: str
 
+class AnuncioEliminar(BaseModel):
+    id: int
+
 @app.get("/anuncios")
 def obtener_anuncios():
     respuesta = supabase.table("anuncios").select("*").execute()
@@ -32,4 +35,9 @@ def obtener_anuncios():
 @app.post("/anuncios")
 def agregar_anuncio(anuncio: Anuncio):
     respuesta = supabase.table("anuncios").insert({"texto": anuncio.texto}).execute()
+    return respuesta.data
+
+@app.delete("/anuncios")
+def eliminar_anuncio(anuncio: AnuncioEliminar):
+    respuesta = supabase.table("anuncios").delete().eq("id", anuncio.id).execute()
     return respuesta.data
