@@ -7,10 +7,46 @@
     <input id="textoAnuncio" type="text" placeholder="Ej: Reunion viernes 7pm">
     <button id="btnEnviar">Enviar Anuncio</button>
 
+    <div id="listaAnuncios"></div>
+    
     <script>
         const btnEnviar = document.getElementById("btnEnviar")
         const inputNombre = document.getElementById("textoAnuncio")
 
+        // Cargar y mostrar anuncios
+        async function cargarAnuncios() {
+            const respuesta = await fetch("https://anuncios-ibv-production.up.railway.app/anuncios")
+            const datos = await respuesta.json()
+            
+            const lista = document.getElementById("listaAnuncios")
+            lista.innerHTML = ""
+            
+            datos.forEach(function(anuncio) {
+                const div = document.createElement("div")
+                div.textContent = anuncio.texto
+                
+                const btnEliminar = document.createElement("button")
+                btnEliminar.textContent = "Eliminar"
+                btnEliminar.addEventListener("click", function() {
+                    eliminarAnuncio(anuncio.id)
+                })
+
+            
+                const btnUpdate = document.createElement("button")
+                btnUpdate.textContent = "Actualizar"
+                btnUpdate.addEventListener("click", function() {
+                    const nuevoTexto = prompt("Nuevo texto del anuncio:")
+                    updateAnuncio(anuncio.id, nuevoTexto)
+                })
+            
+                
+                div.appendChild(btnEliminar)
+                div.appendChild(btnUpdate)
+                lista.appendChild(div)
+            })
+        }
+
+        // Agregar anuncio
         btnEnviar.addEventListener("click", async function() {
             const respuesta = await fetch("https://anuncios-ibv-production.up.railway.app/anuncios", {
                 method: "POST",
@@ -19,7 +55,35 @@
                 },
                 body: JSON.stringify({texto: inputNombre.value})
             })
+            inputNombre.value = ""
+            cargarAnuncios()
         })
+
+         // Eliminar anuncio
+        async function eliminarAnuncio(id) {
+            await fetch("https://anuncios-ibv-production.up.railway.app/anuncios", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({id: id})
+            })
+            cargarAnuncios()
+        }
+
+        // Actualizar anuncio
+        async function updateAnuncio(id, nuevoTexto) {
+            await fetch("https://anuncios-ibv-production.up.railway.app/anuncios", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({elID: id, nuevo_texto: nuevoTexto})
+            })
+            cargarAnuncios()
+        }
+        
+        cargarAnuncios()
     </script>
 </body>
 </html>
