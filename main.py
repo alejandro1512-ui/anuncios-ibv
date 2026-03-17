@@ -27,6 +27,10 @@ class Anuncio(BaseModel):
 class AnuncioEliminar(BaseModel):
     id: int
 
+class AnuncioActualizar(BaseModel):
+    elID: int
+    nuevo_texto: str
+
 @app.get("/anuncios")
 def obtener_anuncios():
     respuesta = supabase.table("anuncios").select("*").execute()
@@ -40,4 +44,9 @@ def agregar_anuncio(anuncio: Anuncio):
 @app.delete("/anuncios")
 def eliminar_anuncio(anuncio: AnuncioEliminar):
     respuesta = supabase.table("anuncios").delete().eq("id", anuncio.id).execute()
+    return respuesta.data
+
+@app.put("/anuncios")
+def actualizar_anuncio(anuncio: AnuncioActualizar):
+    respuesta = supabase.table("anuncios").update({"texto": anuncio.nuevo_texto}).eq("id", anuncio.elID).execute()
     return respuesta.data
