@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    <title>Anuncios de Iglesia Buena Vista</title>
+</head>
+<body>
+    <input id="textoAnuncio" type="text" placeholder="Ej: Reunion viernes 7pm">
+    <button id="btnEnviar">Enviar Anuncio</button>
+
+    <script>
+        const btnEnviar = document.getElementById("btnEnviar")
+        const inputNombre = document.getElementById("textoAnuncio")
+
+        btnEnviar.addEventListener("click", async function() {
+            const respuesta = await fetch("https://anuncios-ibv-production.up.railway.app/anuncios", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({texto: inputNombre.value})
+            })
+        })
+    </script>
+</body>
+</html>

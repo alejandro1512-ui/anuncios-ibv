@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+    <title>Anuncios de Iglesia Buena Vista</title>
+</head>
+<body>
+    <p>Anuncios: <span id="anuncios"></span></p>
+
+    <script>
+        const display = document.getElementById("anuncios")
+
+        async function cargarAnuncios() {
+            const respuesta = await fetch("https://anuncios-ibv-production.up.railway.app/anuncios")
+            const datos = await respuesta.json()
+            
+            datos.forEach(function(anuncio){
+            const parrafo = document.createElement("p")
+            parrafo.textContent = anuncio.texto
+            display.appendChild(parrafo)
+        })
+        }
+        cargarAnuncios()
+    </script>
+</body>
+</html>
