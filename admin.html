@@ -1,14 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
+<head>
     <title>Anuncios de Iglesia Buena Vista</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <input id="textoAnuncio" type="text" placeholder="Ej: Reunion viernes 7pm">
-    <button id="btnEnviar">Enviar Anuncio</button>
+<body class="bg-gray-100 min-h-screen p-8">
 
-    <div id="listaAnuncios"></div>
-    
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">
+            Admin - Anuncios IBV
+        </h1>
+
+        <div class="bg-white rounded-xl shadow p-6 mb-8">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Nuevo anuncio</h2>
+            <div class="flex gap-3">
+                <input 
+                    id="textoAnuncio"
+                    type="text"
+                    placeholder="Ej. Reunion viernes 7pm"
+                    class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                <button
+                    id="btnEnviar"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                    Agregar
+                </button>    
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Anuncios actuales</h2>
+            <div id="listaAnuncios"></div>
+        </div>
+    </div>
     <script>
         const btnEnviar = document.getElementById("btnEnviar")
         const inputNombre = document.getElementById("textoAnuncio")
@@ -22,27 +47,35 @@
             lista.innerHTML = ""
             
             datos.forEach(function(anuncio) {
-                const div = document.createElement("div")
-                div.textContent = anuncio.texto
-                
+                const contenedor = document.createElement("div")
+                contenedor.className = "flex items-center justify-between py-3 border-b border-gray-100"
+
+                const textoSpan = document.createElement("span")
+                textoSpan.textContent = anuncio.texto
+                textoSpan.className = "text-gray-700"
+
                 const btnEliminar = document.createElement("button")
                 btnEliminar.textContent = "Eliminar"
+                btnEliminar.className = "bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition text-sm ml-3"
                 btnEliminar.addEventListener("click", function() {
                     eliminarAnuncio(anuncio.id)
                 })
 
-            
                 const btnUpdate = document.createElement("button")
-                btnUpdate.textContent = "Actualizar"
+                btnUpdate.textContent = "Editar"
+                btnUpdate.className = "bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition text-sm ml-2"
                 btnUpdate.addEventListener("click", function() {
                     const nuevoTexto = prompt("Nuevo texto del anuncio:")
                     updateAnuncio(anuncio.id, nuevoTexto)
                 })
-            
-                
-                div.appendChild(btnEliminar)
-                div.appendChild(btnUpdate)
-                lista.appendChild(div)
+
+                const botones = document.createElement("div")
+                botones.appendChild(btnEliminar)
+                botones.appendChild(btnUpdate)
+
+                contenedor.appendChild(textoSpan)
+                contenedor.appendChild(botones)
+                lista.appendChild(contenedor)
             })
         }
 
